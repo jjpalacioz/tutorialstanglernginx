@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -5,6 +6,28 @@ from rest_framework import status
 from .infra.factories import PaymentFactory
 from .services import CompraService
 from .models import Producto
+
+
+def inventario(request):
+    """
+    Vista HTML/JSON de inventario (Tutorial 03).
+
+    Representa la 'puerta HTML'. Al comprar por la API, el stock cambia aqui,
+    demostrando que ambas puertas (HTML y API) conducen a la misma logica.
+    """
+    productos = Producto.objects.all().order_by('id')
+    data = {
+        'inventario': [
+            {
+                'id': p.id,
+                'nombre': p.nombre,
+                'precio': str(p.precio),
+                'stock': p.stock,
+            }
+            for p in productos
+        ]
+    }
+    return JsonResponse(data, json_dumps_params={'indent': 2})
 
 
 def setup_service():
