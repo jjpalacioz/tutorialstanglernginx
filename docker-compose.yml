@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:15
@@ -25,6 +23,10 @@ services:
       - DB_PASSWORD=secret_password
       - DB_HOST=db
       - DB_PORT=5432
+      # Tutorial 02: Factory Method lee esta variable para elegir el
+      # procesador de pago. MOCK -> MockPaymentProcessor ([DEBUG] ...).
+      # Cambie a BANCO (o borre la linea) para usar el procesador real.
+      - PAYMENT_PROVIDER=MOCK
     # NOTA: Ya no hay seccion 'ports' aqui. Django esta aislado.
 
   # CAMBIO 2: Agregamos el servicio Nginx
