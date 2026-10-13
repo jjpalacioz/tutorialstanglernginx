@@ -17,14 +17,31 @@ verificado en este repositorio:
 
 ## 0. Requisitos
 
-Activar el entorno virtual (o conda) donde ya tienes Django instalado:
+Activa tu entorno virtual (o conda) e instala las dependencias:
 
 ```bash
-pip install djangorestframework
+pip install django djangorestframework
 ```
 
-(Para la demostración local puedes usar SQLite; en producción el proyecto usa
-PostgreSQL vía Docker Compose. Las variables de BD están en `settings.py`.)
+### Opción recomendada para la demo: SQLite (sin PostgreSQL ni Docker)
+
+El proyecto usa PostgreSQL en producción, pero para generar la evidencia puedes
+usar SQLite con solo exportar una variable de entorno. **Hazlo en la misma
+terminal donde correrás los comandos:**
+
+```bash
+# Linux / Mac
+export USE_SQLITE=True
+
+# Windows (CMD)
+set USE_SQLITE=True
+
+# Windows (PowerShell)
+$env:USE_SQLITE="True"
+```
+
+Con eso Django creará un archivo `db.sqlite3` local y no necesitas nada más.
+(Si prefieres PostgreSQL, no exportes la variable y usa `docker compose up`.)
 
 ---
 
@@ -59,7 +76,10 @@ Anota el `stock` del producto id=1 (p. ej. **stock: 10**). Toma captura.
 
 ## 3. Comprar por la API (puerta JSON) — EVIDENCIA PRINCIPAL
 
-Usa **Postman** o la **interfaz web de DRF** y envía:
+La API está configurada con acceso abierto (`AllowAny`) para la demo, así que
+no necesitas login ni token. Usa **Postman** o la **interfaz web de DRF**
+(abre <http://localhost:8000/api/v1/comprar/> en el navegador y verás un
+formulario para enviar el POST). Envía:
 
 ```
 POST http://localhost:8000/api/v1/comprar/
