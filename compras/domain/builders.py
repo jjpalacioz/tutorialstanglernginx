@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from ..models import Orden
 
 
@@ -26,9 +28,13 @@ class OrdenBuilder:
         if not self._usuario or not self._items:
             raise ValueError("Datos insuficientes para crear la orden.")
 
-        # Encapsulamos la logica de calculo
-        subtotal = sum(p.precio for p in self._items)
-        total_con_iva = subtotal * 1.19
+        # Encapsulamos la logica de calculo.
+        # Usamos Decimal para el IVA: el 'precio' de un Producto real es un
+        # DecimalField, y multiplicar Decimal * float lanza TypeError. Con
+        # Decimal('1.19') el calculo es exacto y funciona tanto con productos
+        # reales (API) como con los productos demo de la vista HTML.
+        subtotal = sum((Decimal(str(p.precio)) for p in self._items), Decimal('0'))
+        total_con_iva = subtotal * Decimal('1.19')
 
         orden = Orden.objects.create(
             usuario=self._usuario,
